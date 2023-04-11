@@ -11,7 +11,7 @@ import jax.tree_util as jtu
 
 from .adjoint import AbstractAdjoint, DirectAdjoint, RecursiveCheckpointAdjoint
 from .custom_types import Array, Bool, Int, PyTree, Scalar
-from .event import AbstractDiscreteTerminatingEvent
+from .event import AbstractDiscreteTerminatingEvent, AbstractDiscreteNonTerminatingEvent
 from .global_interpolation import DenseInterpolation
 from .heuristics import is_sde, is_unsafe_sde
 from .saveat import SaveAt, SubSaveAt
