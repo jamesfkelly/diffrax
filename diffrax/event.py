@@ -96,4 +96,3 @@ SteadyStateEvent.__init__.__doc__ = """**Arguments:**
 - `norm`: A function `PyTree -> Scalar`, which is called to determine whether
     the vector field is close to zero.
 """
-# Test
