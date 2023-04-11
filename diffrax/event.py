@@ -96,3 +96,31 @@ SteadyStateEvent.__init__.__doc__ = """**Arguments:**
 - `norm`: A function `PyTree -> Scalar`, which is called to determine whether
     the vector field is close to zero.
 """
+
+
+class AbstractDiscreteNonTerminatingEvent(eqx.Module):
+    """Evaluated at the end of each integration step. If true then the solve is stopped
+    at that time.
+    """
+
+    @abc.abstractmethod
+    def __call__(self, state, **kwargs):
+        """**Arguments:**
+
+        - `state`: a dataclass of the evolving state of the system, including in
+            particular the solution `state.y` at time `state.tprev`.
+        - `**kwargs`: the integration options held constant throughout the solve
+            are passed as keyword arguments: `terms`, `solver`, `args`. etc.
+
+        **Returns**
+
+        A boolean. If true then the solve is terminated.
+        """
+
+class DiscreteNonTerminatingEvent(AbstractDiscreteTerminatingEvent):
+    """Terminates the solve if its condition is ever active."""
+
+    state_update: Callable[..., [Array]]
+
+    def __call__(self, state, **kwargs):
+        return self.state_update(state, **kwargs)
