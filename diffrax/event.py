@@ -114,7 +114,7 @@ class AbstractDiscreteNonTerminatingEvent(eqx.Module):
 
         **Returns**
 
-        A boolean. If true then the solve is terminated.
+        A pair (Boolean, State). If true state is updated
         """
 
 class DiscreteNonTerminatingEvent(AbstractDiscreteTerminatingEvent):
