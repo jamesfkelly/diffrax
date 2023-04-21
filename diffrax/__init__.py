@@ -9,7 +9,9 @@ from .autocitation import citation, citation_rules
 from .brownian import AbstractBrownianPath, UnsafeBrownianPath, VirtualBrownianTree
 from .event import (
     AbstractDiscreteTerminatingEvent,
+    AbstractDiscreteNonTerminatingEvent,
     DiscreteTerminatingEvent,
+    DiscreteNonTerminatingEvent,
     SteadyStateEvent,
 )
 from .global_interpolation import (

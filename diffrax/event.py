@@ -120,7 +120,7 @@ class AbstractDiscreteNonTerminatingEvent(eqx.Module):
 class DiscreteNonTerminatingEvent(AbstractDiscreteTerminatingEvent):
     """Terminates the solve if its condition is ever active."""
 
-    state_update: Callable[..., [Array]]
+    state_update: Callable[..., PyTree]
 
     def __call__(self, state, **kwargs):
         return self.state_update(state, **kwargs)

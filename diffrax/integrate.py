@@ -116,6 +116,7 @@ def loop(
     solver,
     stepsize_controller,
     discrete_terminating_event,
+    discrete_non_terminating_event,
     saveat,
     t0,
     t1,
@@ -230,6 +231,9 @@ def loop(
         # branch below, where we want to make sure that it is the value of `y` at
         # `tprev` that is actually saved. (And not just the value of `y` at the
         # previous step's `tnext`, i.e. immediately before the jump.)
+        
+        if discrete_non_terminating_event is not None:
+            pass
 
         # Store the first unsuccessful result we get whilst iterating (if any).
         result = state.result
@@ -328,7 +332,7 @@ def loop(
                 dense_infos,
             )
             dense_save_index = dense_save_index + keep_step
-
+        
         new_state = State(
             y=y,
             tprev=tprev,
@@ -345,6 +349,25 @@ def loop(
             dense_infos=dense_infos,
             dense_save_index=dense_save_index,
         )
+        
+        if discrete_non_terminating_event is not None:
+            # call function
+            new_state = State(
+                y=discrete_non_terminating_event(new_state),
+                tprev=tprev,
+                tnext=tnext,
+                made_jump=made_jump,
+                solver_state=solver_state,
+                controller_state=controller_state,
+                result=result,
+                num_steps=num_steps,
+                num_accepted_steps=num_accepted_steps,
+                num_rejected_steps=num_rejected_steps,
+                save_state=save_state,
+                dense_ts=dense_ts,
+                dense_infos=dense_infos,
+                dense_save_index=dense_save_index,
+            )
 
         if discrete_terminating_event is not None:
             discrete_terminating_event_occurred = discrete_terminating_event(
@@ -419,6 +442,7 @@ def diffeqsolve(
     stepsize_controller: AbstractStepSizeController = ConstantStepSize(),
     adjoint: AbstractAdjoint = RecursiveCheckpointAdjoint(),
     discrete_terminating_event: Optional[AbstractDiscreteTerminatingEvent] = None,
+    discrete_non_terminating_event: Optional[AbstractDiscreteNonTerminatingEvent] = None,
     max_steps: Optional[int] = 4096,
     throw: bool = True,
     solver_state: Optional[PyTree] = None,
@@ -755,6 +779,7 @@ def diffeqsolve(
         solver=solver,
         stepsize_controller=stepsize_controller,
         discrete_terminating_event=discrete_terminating_event,
+        discrete_non_terminating_event=discrete_non_terminating_event,
         saveat=saveat,
         t0=t0,
         t1=t1,
